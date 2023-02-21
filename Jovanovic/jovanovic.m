@@ -4,7 +4,13 @@ function [res] = jovanovic(parameters)
     % This function solves the Jovanovic (1979) model using value function iteration
     % Inputs:
     %   parameters: a structure with the following fields
-
+    %       beta: discount factor
+    % Output:
+    %   res: a structure with the following fields
+    %       V_m: value function
+    %       theta_hat: threshold theta
+    %       m_hat: threshold m
+    
 
     % Unpack the parameters
     beta = parameters.beta;

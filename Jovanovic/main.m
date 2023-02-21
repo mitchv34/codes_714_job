@@ -8,7 +8,6 @@ Description:
 ==========================================================================================
 %}
 
-% Parameters 
 % Parameters
 n_m = 100; % Number of m values
 n_theta = 100; % Number of theta values
