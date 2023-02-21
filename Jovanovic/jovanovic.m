@@ -5,6 +5,7 @@ function [res] = jovanovic(parameters)
     % Inputs:
     %   parameters: a structure with the following fields
 
+
     % Unpack the parameters
     beta = parameters.beta;
     mu = parameters.mu;
@@ -21,18 +22,16 @@ function [res] = jovanovic(parameters)
     sigma_1 = ( sigma_0^2 ) / ( sigma_0^2 + sigma_u^2 ) * sigma_u^2;            % theta distribution
 
     % Grids
-    [m_grid, G_m]      = discretizeAR1_Tauchen(mu, 0, sigma_m,n_m, 3);          % m distribution
-    m_grid = m_grid';
-    [theta_0, F_theta] = discretizeAR1_Tauchen(0, 0, sigma_1,n_theta, 3);       % theta distribution (centered at 0)
-    theta_0 = theta_0';
+    m_grid = linspace(mu - 3 * sigma_m, mu + 3 * sigma_m, n_m);
+    theta_0 = linspace(- 3 * sigma_1, 3 * sigma_1, n_theta);
+    G_m = normpdf(m_grid, mu, sigma_m); G_m = G_m / sum(G_m);
+    F_theta = normpdf(theta_0, 0, sigma_1); F_theta = F_theta / sum(F_theta);
 
-    % Keep only the firt row of the distribution
-    G_m = G_m(1, :);
-    F_theta = F_theta(1, :);
+    % Add theta
 
-    % Initial guess for the value function
+    % Value function initial guess
     V_m = zeros(1, n_m);
-
+    
     %% Solving the model
     % Initialize the error and the iteration counter
     dist = inf;
