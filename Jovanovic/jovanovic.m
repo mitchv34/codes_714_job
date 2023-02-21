@@ -32,8 +32,6 @@ function [res] = jovanovic(parameters)
 
     % Initial guess for the value function
     V_m = zeros(1, n_m);
-    theta_hat = zeros(1, n_m);
-    m_hat = zeros(1, n_m);
 
     %% Solving the model
     % Initialize the error and the iteration counter
@@ -62,20 +60,6 @@ function [res] = jovanovic(parameters)
             int = int_over + int_under;
             % Calculate the value function
             V_m_new(i) = max(m_grid(i) + beta * max( int, beta * Q ), beta * Q);
-            % Calculate the threshold theta_hat the lowest theta such that: (theta / (1 - beta) ≥ beta * Q)
-            theta_pol = theta( find( theta / (1 - beta) > beta * Q, 1,  'first') );
-            if numel(theta_pol) == 1
-                theta_hat(i) = theta_pol;
-            else
-                theta_hat(i) = NaN;
-            end
-            % Calculate the threshold m_hat the lowest m such that: m_grid(i) + beta * max( int, beta * Q ) ≥ beta * Q
-            m_pol = m_grid( find( m_grid(i) + beta * max( int, beta * Q ) >= beta * Q, 1,  'first') );
-            if numel(m_pol) == 1
-                m_hat(i) = m_pol;
-            else
-                m_hat(i) = NaN;
-            end
         end
 
         % compute the distance between the old and the new value function
@@ -87,6 +71,12 @@ function [res] = jovanovic(parameters)
         % Update the iteration counter
         iter = iter + 1;
     end
+
+    % Calculate the threshold theta_hat the lowest theta such that: (theta / (1 - beta) ≥ beta * Q)
+    theta_hat = theta( find( theta / (1 - beta) > beta * Q, 1,  'first') );
+
+    % Calculate the threshold m_hat the lowest m such that: m_grid(i) + beta * max( int, beta * Q ) ≥ beta * Q
+    m_hat = m_grid( find( m_grid(i) + beta * max( int, beta * Q ) >= beta * Q, 1,  'first') );
     
     % Create a results structure
     res.V_m = V_m;
